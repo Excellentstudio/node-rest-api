@@ -51,7 +51,7 @@ router.post('/add', authenticateAdmin as any, [
  * @swagger
  * /api/admins/login:
  *   post:
- *     summary: "Admin login - email: \"admin@example.com\", password: admin"
+ *     summary: "Admin login - email: \"admin@example.com\", password: admin1234"
  *     tags: [Admin]
  *     requestBody:
  *       required: true

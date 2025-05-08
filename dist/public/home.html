@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messaging API | Developer Documentation</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 40px;
+      background-color: #f4f6f8;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    h1, h2 {
+      color: #1a1a1a;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .doc-link {
+      display: inline-block;
+      background-color: #3498db;
+      color: white;
+      padding: 10px 18px;
+      margin-top: 8px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1em;
+      transition: background-color 0.3s;
+    }
+
+    .doc-link:hover {
+      background-color: #2980b9;
+    }
+
+    ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    footer {
+      margin-top: 60px;
+      font-size: 0.9em;
+      color: #888;
+    }
+
+    code {
+      background-color: #eef1f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to the Messaging API</h1>
+  <p>This API powers real-time messaging features for users and admins, built with REST and WebSocket support. Explore API documentation and get started below.</p>
+
+  <div class="section">
+    <h2>📌 Swagger Documentation</h2>
+    <p>Browse API endpoints and test directly via Swagger:</p>
+    <a href="/api/docs/user" class="doc-link">User API Docs</a>
+    <a href="/api/docs/admin" class="doc-link" style="margin-left: 10px;">Admin API Docs</a>
+  </div>
+
+  <div class="section">
+    <h2>👤 User Features</h2>
+    <ul>
+      <li>Sign up with <code>first name</code>, <code>last name</code>, <code>email</code>, <code>country</code>, and <code>password</code>.</li>
+      <li>Email verification required after signup.</li>
+      <li>Send messages to other users via <strong>WebSockets</strong>.</li>
+      <li>Join and leave chat groups.</li>
+      <li>Send messages to groups using WebSockets.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>🛠️ Admin Features</h2>
+    <ul>
+      <li>Admins are added via seeder or by other admins only. <strong>Admins cannot self-register.</strong></li>
+      <li>Admin endpoints are restricted and require elevated access.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>✅ Technical Specifications</h2>
+    <ul>
+      <li>All endpoints use <strong>server-side validation</strong> (form inputs, schema checks).</li>
+      <li><strong>JWT Authentication</strong> with bearer token support.</li>
+      <li><strong>Rate limiting</strong> applied to prevent abuse (e.g. 100 requests/hour per user).</li>
+      <li><strong>Structured logging</strong> with log rotation enabled for performance and diagnostics.</li>
+      <li>Separate <code>/api</code> namespace for backend routes.</li>
+    </ul>
+  </div>
+
+  <footer style="text-align: center;">
+    &copy; Messaging Platform API - NodeJS Assessment<br>
+    <span><strong>Submitted by:</strong> Emmanuel Excellent</span>
+  </footer>
+</body>
+</html>

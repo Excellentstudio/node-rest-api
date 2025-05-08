@@ -9,6 +9,8 @@ import connectDB from './config/db';
 import { errorHandler } from './middleware/errorHandler';
 import { seedAdmin } from './seeders/adminSeeder';
 
+import path from 'path';
+
 const express = require('express');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
@@ -39,6 +41,8 @@ app.use(cors());
 app.use(express.json());
 app.set('trust proxy', 1); // Enable trust proxy for express-rate-limit
 app.use(limiter);
+
+app.use(express.static(path.join(__dirname, '../public')));
 
 const userSwaggerSpec = swaggerJSDoc({
   definition: {
@@ -100,11 +104,9 @@ app.use('/api/docs/admin', swaggerUi.serveFiles(adminSwaggerSpec, {}), swaggerUi
   }
 }));
 
-// Custom API Home Page at /api
-import path from 'path';
 
 app.get('/api', (req: any, res: any) => {
-  res.sendFile(path.join(__dirname, 'home.html'));
+  res.sendFile(path.join(__dirname, '../public/home.html'));
 });
 
 // Add routes

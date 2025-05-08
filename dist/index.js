@@ -59,8 +59,8 @@ const userSwaggerSpec = (0, swagger_jsdoc_1.default)({
             }]
     },
     apis: [
-        __dirname + '/routes/user.ts',
-        __dirname + '/routes/group.ts',
+        __dirname + '/routes/user.js',
+        __dirname + '/routes/group.js',
     ],
 });
 const adminSwaggerSpec = (0, swagger_jsdoc_1.default)({
@@ -81,7 +81,7 @@ const adminSwaggerSpec = (0, swagger_jsdoc_1.default)({
             }]
     },
     apis: [
-        __dirname + '/routes/admin.ts',
+        __dirname + '/routes/admin.js',
     ],
 });
 // Swagger docs setup with custom options

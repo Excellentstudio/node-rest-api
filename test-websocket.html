@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <style>
+        .container { margin: 20px; }
+        .messages { border: 1px solid #ccc; padding: 10px; margin: 10px 0; height: 200px; overflow-y: auto; }
+        .input-group { margin: 10px 0; }
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>WebSocket Test Client</h2>
+        
+        <!-- Login Section -->
+        <div id="loginSection">
+            <h3>Login</h3>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email">
+                <input type="password" id="password" placeholder="Password">
+                <button onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <!-- WebSocket Section -->
+        <div id="wsSection" style="display: none;">
+            <h3>Connected as: <span id="userId"></span></h3>
+            
+            <!-- Direct Message -->
+            <div>
+                <h4>Direct Message</h4>
+                <div class="input-group">
+                    <input type="text" id="recipientId" placeholder="Recipient User ID">
+                    <input type="text" id="directMessage" placeholder="Message">
+                    <button onclick="sendDirectMessage()">Send Direct Message</button>
+                </div>
+            </div>
+
+            <!-- Group Message -->
+            <div>
+                <h4>Group Message</h4>
+                <div class="input-group">
+                    <input type="text" id="groupId" placeholder="Group ID">
+                    <button onclick="joinGroup()">Join Group</button>
+                    <button onclick="leaveGroup()">Leave Group</button>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="groupMessage" placeholder="Group Message">
+                    <button onclick="sendGroupMessage()">Send Group Message</button>
+                </div>
+            </div>
+
+            <h4>Messages</h4>
+            <div id="messages" class="messages"></div>
+        </div>
+    </div>
+
+    <script>
+        let ws;
+        let token;
+
+        async function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/users/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (data.token) {
+                    token = data.token;
+                    document.getElementById('userId').textContent = data.user.id;
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('wsSection').style.display = 'block';
+                    connectWebSocket();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed');
+            }
+        }
+
+        function connectWebSocket() {
+            ws = new WebSocket('ws://localhost:3000');
+
+            ws.onopen = () => {
+                console.log('Connected to WebSocket');
+                ws.send(JSON.stringify({ type: 'init', token }));
+            };
+
+            ws.onmessage = (event) => {
+                const msg = JSON.parse(event.data);
+                const messagesDiv = document.getElementById('messages');
+                let message = '';
+
+                switch (msg.type) {
+                    case 'init_success':
+                        message = `Initialized WebSocket connection with ID: ${msg.userId}`;
+                        break;
+                    case 'direct_message':
+                        message = `Direct message from ${msg.from}: ${msg.content}`;
+                        break;
+                    case 'group_message':
+                        message = `Group message in ${msg.groupId} from ${msg.from}: ${msg.content}`;
+                        break;
+                    case 'joined_group':
+                        message = `Joined group: ${msg.groupId}`;
+                        break;
+                    case 'left_group':
+                        message = `Left group: ${msg.groupId}`;
+                        break;
+                    case 'error':
+                        message = `Error: ${msg.message}`;
+                        break;
+                }
+
+                const messageElement = document.createElement('div');
+                messageElement.textContent = message;
+                messagesDiv.appendChild(messageElement);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from WebSocket');
+            };
+        }
+
+        function sendDirectMessage() {
+            const to = document.getElementById('recipientId').value;
+            const content = document.getElementById('directMessage').value;
+            ws.send(JSON.stringify({ type: 'direct_message', to, content }));
+            document.getElementById('directMessage').value = '';
+        }
+
+        function joinGroup() {
+            const groupId = document.getElementById('groupId').value;
+            ws.send(JSON.stringify({ type: 'join_group', groupId }));
+        }
+
+        function leaveGroup() {
+            const groupId = document.getElementById('groupId').value;
+            ws.send(JSON.stringify({ type: 'leave_group', groupId }));
+        }
+
+        function sendGroupMessage() {
+            const groupId = document.getElementById('groupId').value;
+            const content = document.getElementById('groupMessage').value;
+            ws.send(JSON.stringify({ type: 'group_message', groupId, content }));
+            document.getElementById('groupMessage').value = '';
+        }
+    </script>
+</body>
+</html>

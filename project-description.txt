@@ -1,0 +1,10 @@
+create a simple REST API and  Swagger. 
+
+The API should have 2 roles; users and admins with 2 different Swagger links at /api/docs/user and /api/docs/admin.
+- Users can sign up with their name, first name, email, country and password with email verification.
+- A default admin is added by seeder. Admins cannot sign up but can be added by other admins.
+- A user can send a message to another user via websockets
+- A user can join a group, send a message to a group via websockets and leave the group.
+- Server-side validation must be implemented at endpoints.
+- Logging with log rotation.
+- Rate-limits for all endpoints.
